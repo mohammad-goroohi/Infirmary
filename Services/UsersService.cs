@@ -1,7 +1,7 @@
 ﻿
-using QuizWebAssembly.Models.Users;
+using Infirmary.Models.Users;
 
-namespace QuizWebAssembly.Services
+namespace Infirmary.Services
 {
     public class UsersService : CrudService<User>
     {

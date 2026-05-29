@@ -1,4 +1,4 @@
-﻿namespace QuizWebAssembly.Services.Shared
+﻿namespace Infirmary.Services.Shared
 {
 
     public class ToastService

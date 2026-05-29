@@ -1,4 +1,4 @@
-﻿namespace QuizWebAssembly.Models.Shared
+﻿namespace Infirmary.Models.Shared
 {
     public class PropertyDescriptor
     {

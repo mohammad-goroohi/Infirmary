@@ -1,1 +1,1 @@
-# QuizWebAssembly
+# Infirmary

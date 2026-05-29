@@ -1,7 +1,7 @@
-﻿using QuizWebAssembly.Models.Shared;
-using QuizWebAssembly.Models.Users;
+﻿using Infirmary.Models.Shared;
+using Infirmary.Models.Users;
 
-namespace QuizWebAssembly.Services
+namespace Infirmary.Services
 {
     public abstract class CrudService<Entity> where Entity : BaseEntity
     {

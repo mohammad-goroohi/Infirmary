@@ -1,4 +1,4 @@
-﻿namespace QuizWebAssembly.Extensions
+﻿namespace Infirmary.Extensions
 {
     public static class StringExtensions
     {

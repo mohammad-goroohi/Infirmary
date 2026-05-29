@@ -1,6 +1,6 @@
-﻿using QuizWebAssembly.Models.Shared;
-using QuizWebAssembly.Models.Users;
-namespace QuizWebAssembly.Models.Roles
+﻿using Infirmary.Models.Shared;
+using Infirmary.Models.Users;
+namespace Infirmary.Models.Roles
 {
     public class Role :  BaseEntity
     {

@@ -1,6 +1,6 @@
-﻿using QuizWebAssembly.Models.Shared;
+﻿using Infirmary.Models.Shared;
 
-namespace QuizWebAssembly.Models
+namespace Infirmary.Models
 {
     public class MenuItem : BaseEntity
     {

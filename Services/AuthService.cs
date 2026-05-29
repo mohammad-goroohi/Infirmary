@@ -1,6 +1,6 @@
-﻿using QuizWebAssembly.Models.Authenticate;
+﻿using Infirmary.Models.Authenticate;
 using Blazored.LocalStorage;
-namespace QuizWebAssembly.Services
+namespace Infirmary.Services
 {
 
     public class AuthService

@@ -1,6 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 
-namespace QuizWebAssembly.Models.Shared
+namespace Infirmary.Models.Shared
 {
     public class DataGridConfig
     {

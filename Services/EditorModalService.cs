@@ -1,6 +1,6 @@
-﻿using QuizWebAssembly.Models.Shared;
+﻿using Infirmary.Models.Shared;
 
-namespace QuizWebAssembly.Services
+namespace Infirmary.Services
 {
     public class EditorModalService
     {

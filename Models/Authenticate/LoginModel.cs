@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-namespace QuizWebAssembly.Models.Authenticate
+namespace Infirmary.Models.Authenticate
 {
     public class LoginModel
     {

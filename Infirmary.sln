@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.13.35931.197
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuizWebAssembly", "QuizWebAssembly.csproj", "{58982497-43E9-42A4-8F8A-4C5C8F4A439A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infirmary", "Infirmary.csproj", "{58982497-43E9-42A4-8F8A-4C5C8F4A439A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

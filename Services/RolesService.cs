@@ -1,8 +1,8 @@
-﻿using QuizWebAssembly.Models.Roles;
-using QuizWebAssembly.Models.Users;
-using QuizWebAssembly.Pages.Admin;
+﻿using Infirmary.Models.Roles;
+using Infirmary.Models.Users;
+using Infirmary.Pages.Admin;
 
-namespace QuizWebAssembly.Services
+namespace Infirmary.Services
 {
     public class RolesService : CrudService<Role>
     {

@@ -1,4 +1,4 @@
-﻿namespace QuizWebAssembly.Models.Users
+﻿namespace Infirmary.Models.Users
 {
     public class UserViewModel
     {

@@ -1,9 +1,9 @@
 using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using QuizWebAssembly;
-using QuizWebAssembly.Services;
-using QuizWebAssembly.Services.Shared;
+using Infirmary;
+using Infirmary.Services;
+using Infirmary.Services.Shared;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
