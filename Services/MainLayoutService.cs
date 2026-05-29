@@ -4,8 +4,16 @@ namespace Infirmary.Services
 {
     public class MainLayoutService : CrudService<MenuItem>
     {
-        public MainLayoutService()
+        private readonly GenericService _genericService;
+
+        public MainLayoutService(GenericService genericService)
         {
+            _genericService = genericService;
+
+
+
+
+
             Create(new MenuItem
             {
                 Title = "داشبورد",
@@ -96,6 +104,17 @@ namespace Infirmary.Services
                     },
                 }
             });
+
+
+            foreach (var service in _genericService.Read())
+            {
+                Create(new MenuItem
+                {
+                    Title = service.ServiceName,
+                    Href = $"/Generic/{service.Id}",
+                    Icon = "fa-solid fa-gauge-high",
+                });
+            }
         }
     }
 }

@@ -3,31 +3,31 @@ using Infirmary.Models.Users;
 
 namespace Infirmary.Services
 {
-    public abstract class CrudService<Entity> where Entity : BaseEntity
+    public class CrudService<Entity> where Entity : BaseEntity
     {
         protected readonly Dictionary<int, Entity> _entityCache = new Dictionary<int, Entity>();
-        public virtual int Create(Entity Entity)
+        public virtual int Create(Entity entity)
         {
-            Entity.Id = new Random().Next();
-            _entityCache.Add(Entity.Id, Entity);
-            return Entity.Id;
+            entity.Id = new Random().Next();
+            _entityCache.Add(entity.Id, entity);
+            return entity.Id;
         }
         public virtual List<Entity> Read()
         {
             return _entityCache.Values.ToList();
         }
-        public virtual Entity Read(int Id)
+        public virtual Entity Read(int id)
         {
-            return _entityCache[Id];
+            return _entityCache[id];
         }
         
-        public virtual void Update(int Id,Entity Entity)
+        public virtual void Update(int Id,Entity entity)
         {
-            _entityCache[Id] = Entity;
+            _entityCache[Id] = entity;
         }
-        public virtual void Delete(int Id)
+        public virtual void Delete(int id)
         {
-            _entityCache.Remove(Id);
+            _entityCache.Remove(id);
         }
     }
 }
