@@ -13,6 +13,7 @@ namespace QuizWebAssembly.Models.Users
         public bool IsActive { get; set; }
         public int Tall { get; set; }
         public DateTime BirthDate { get; set; }
+        public string Time { get; set; }
         public List<int> RolesId { get; set; } = new List<int>();
         public List<Role> Roles { get; set; } = new List<Role>();
     }

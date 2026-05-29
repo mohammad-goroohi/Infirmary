@@ -1,5 +1,6 @@
 ﻿@inherits LayoutComponentBase
 @inject EditorModalService EditorModalService
+@inject MainLayoutService _mainLayoutService
 <div class="wrapper">
 
     <!-- سایدبار -->
@@ -12,72 +13,40 @@
         <div class="sidebar-nav">
             <div class="sidebar-section-title">ناوبری</div>
 
-            <!-- آیتم ساده -->
-            <div class="sidebar-item">
-                <NavLink href="/Dashboard" Match="NavLinkMatch.All" class="sidebar-link">
-                    <i class="fa-solid fa-gauge-high"></i>
-                    <span>داشبورد</span>
-                </NavLink>
-            </div>
 
             <!-- سطح اول با collapse -->
-            <div class="sidebar-item">
-                <a class="sidebar-link" data-bs-toggle="collapse" href="#menuUsers" role="button" aria-expanded="false" aria-controls="menuUsers">
-                    <i class="fa-solid fa-users"></i>
-                    <span>کاربران</span>
-                    <i class="fa-solid fa-angle-down ms-auto"></i>
-                </a>
-                <div class="collapse" id="menuUsers">
-
-                    <div class="sidebar-item">
-                        <NavLink href="/Admin/Users" Match="NavLinkMatch.All" class="sidebar-item">
-                            <span class="sidebar-link">لیست کاربران</span>
+            @foreach (var menuitem in _mainLayoutService.Read())
+            {
+                <div class="sidebar-item">
+                    @if (menuitem.MenuLevelType == MenuLevelType.OnlyOneLevel)
+                    {
+                        <!-- آیتم ساده -->
+                        <NavLink href="@menuitem.Href" Match="NavLinkMatch.All" class="sidebar-link">
+                            <i class="@menuitem.Icon"></i>
+                            <span>@menuitem.Title</span>
                         </NavLink>
-                    </div>                    
-                    <div class="sidebar-item">
-                        <NavLink href="/Admin/Roles" Match="NavLinkMatch.All" class="sidebar-item">
-                            <span class="sidebar-link">لیست نقش ها</span>
-                        </NavLink>
-                    </div>
-                    @*                     <div class="sidebar-item">
-                        <a href="#" class="sidebar-link">ایجاد کاربر</a>
-                    </div>
-                    <div class="sidebar-item">
-                        <a class="sidebar-link" data-bs-toggle="collapse" href="#menuRoles" role="button" aria-expanded="false" aria-controls="menuRoles">
-                            نقش‌ها
+                    }
+                    else
+                    {
+                        <a class="sidebar-link" data-bs-toggle="collapse" href="#@menuitem.ElementId" role="button" aria-expanded="false" aria-controls="@menuitem.ElementId">
+                            <i class="@menuitem.Icon"></i>
+                            <span>@menuitem.Title</span>
                             <i class="fa-solid fa-angle-down ms-auto"></i>
                         </a>
-                        <div class="collapse" id="menuRoles">
-                            <div class="sidebar-item">
-                                <a href="#" class="sidebar-link">لیست نقش‌ها</a>
-                            </div>
-                            <div class="sidebar-item">
-                                <a href="#" class="sidebar-link">افزودن نقش</a>
-                            </div>
-
-                            <!-- سطح سوم -->
-                            <div class="sidebar-item">
-                                <a class="sidebar-link" data-bs-toggle="collapse" href="#menuPermissions" role="button" aria-expanded="false" aria-controls="menuPermissions">
-                                    دسترسی‌ها
-                                    <i class="fa-solid fa-angle-down ms-auto"></i>
-                                </a>
-                                <div class="collapse" id="menuPermissions">
-                                    <div class="sidebar-item">
-                                        <a href="#" class="sidebar-link">لیست دسترسی‌ها</a>
-                                    </div>
-                                    <div class="sidebar-item">
-                                        <a href="#" class="sidebar-link">تنظیم دسترسی</a>
-                                    </div>
+                        <div class="collapse" id="@menuitem.ElementId">
+                            @foreach (var childitem in menuitem.Children)
+                            {
+                                <div class="sidebar-item">
+                                    <NavLink href="@childitem.Href" Match="NavLinkMatch.All" class="sidebar-item">
+                                        <span class="sidebar-link">@childitem.Title</span>
+                                    </NavLink>
                                 </div>
-                            </div>
-                            <!-- پایان سطح سوم -->
-
+                            }
                         </div>
-                    </div> *@
 
+                    }
                 </div>
-            </div>
-
+            }
             <!-- بخش‌ها -->
             @*             <div class="sidebar-item">
                 <a class="sidebar-link" data-bs-toggle="collapse" href="#menuContent" role="button" aria-expanded="false" aria-controls="menuContent">

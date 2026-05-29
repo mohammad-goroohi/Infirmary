@@ -130,7 +130,8 @@ namespace QuizWebAssembly.Models.Shared
         Readonly,
         Password,
         CheckBox,
-        Date
+        Date,
+        Time
     }
     public class InputModal
     {

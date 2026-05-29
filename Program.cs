@@ -14,6 +14,7 @@ builder.Services.AddScoped<RolesService>();
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddSingleton<ToastService>();
 builder.Services.AddSingleton<EditorModalService>();
+builder.Services.AddSingleton<MainLayoutService>();
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 
 await builder.Build().RunAsync();
