@@ -1,4 +1,5 @@
 ﻿@page "/Generic/{Id}"
+@using System.Dynamic
 @layout MainLayout
 @inject GenericService _genericService
 @inject ToastService _toastService
@@ -9,6 +10,8 @@
     [Parameter]
     public string? Id { get; set; }
     public DataGridConfig DataGridConfig { get; set; }
+
+
     protected override async Task OnInitializedAsync()
     {
         int serviceId = Convert.ToInt32(Id);
@@ -16,7 +19,7 @@
 
 
         DataGridConfig = new DataGridConfig();
-        DataGridConfig.Title = "لیست کاربر ها";
+        DataGridConfig.Title = service.DataGridTitle;
         DataGridConfig.GroupActions = new List<DataGridRowActionGroup>
         {
             new DataGridRowActionGroup
@@ -37,39 +40,7 @@
             }
         };
 
-        DataGridConfig.Columns = new List<DataGridColumn>
-        {
-            new DataGridColumn
-            {
-                PropertyName = "Id",
-                Title = "شناسه"
-            },
-            new DataGridColumn
-            {
-                PropertyName = "FirstName",
-                Title = "نام"
-            },
-            new DataGridColumn
-            {
-                PropertyName = "LastName",
-                Title = "نام خوانوادگی"
-            },
-            new DataGridColumn
-            {
-                PropertyName = "UserName",
-                Title = "نام کاربری"
-            },
-            new DataGridColumn
-            {
-                PropertyName = "Email",
-                Title = "ایمیل"
-            },
-            new DataGridColumn
-            {
-                PropertyName = "Tall",
-                Title = "قد"
-            },
-        };
+        DataGridConfig.Columns = GenerateDataGridColumn(service);
         DataGridConfig.LoadDataAsync = () =>
         {
             return Task.FromResult(_genericService.Read(service.ServiceName).Cast<dynamic>().ToList());
@@ -82,7 +53,7 @@
                     Content = "ایا از حذف این سطر مطمئن هستید؟",
                     OnConfirm = () =>
 {
-        //_usersService.Delete(Convert.ToInt32(row["Id"]));
+        _genericService.Delete(service.ServiceName, Convert.ToInt32(row["Id"]));
     }
                 };
         };
@@ -94,238 +65,88 @@
                     ColumnCount = 2,
                     Size = ModalSize.modal_xl,
                     OnSubmit = (form) =>
-{
-        int Id = form["Id"].ToInt32();
+                    {
+                                int Id = form["Id"].ToInt32();
 
-        // var Entiry = _usersService.Read(Id);
-        // Entiry.FirstName = form["FirstName"];
-        // Entiry.LastName = form["LastName"];
-        // Entiry.UserName = form["UserName"];
-        // Entiry.UserName = form["Password"];
-        // Entiry.Email = form["Email"];
-        // Entiry.Tall = form["Tall"].ToInt32();
-    //_usersService.Update(User.Id, User);
-        return true;
-    },
-                    Fields = new List<ItemField>
-                                                                                {
-                                new ItemField
+                                var baseEntity = _genericService.Read(service.ServiceName, Id);
+                                foreach (var item in service.Fields)
                                 {
-                                    PropertyName = "Id",
-                                    Title = "شناسه",
-                                    Value = row["Id"],
-                                    ValuType = ModelEditorValueType.Readonly
-                                },
-                                new ItemField
-                                {
-                                    PropertyName = "FirstName",
-                                    Title = "نام",
-                                    Value = row["FirstName"],
-                                    ValuType = ModelEditorValueType.Text
-                                },
-                                new ItemField
-                                {
-                                    PropertyName = "LastName",
-                                    Title = "نام خوانوادگی",
-                                    Value = row["LastName"],
-                                    ValuType = ModelEditorValueType.Text
-                                },
-                                new ItemField
-                                {
-                                    PropertyName = "UserName",
-                                    Title = "نام کاربری",
-                                    Value = row["UserName"],
-                                    ValuType = ModelEditorValueType.Text
-                                },
-                                new ItemField
-                                {
-                                    PropertyName = "Email",
-                                    Title = "ایمیل",
-                                    Value = row["Email"],
-                                    ValuType = ModelEditorValueType.Text,
-                                    ValidationRules = new List<ValidationItemField>
-                                    {
-                                        new Regex
-                                        {
-                                            Pattern = "^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$",
-                                            ErrorMessage = "فرمت ایمیل درست نیست."
-                                        }
-                                    }
-                                },
-                                new ItemField
-                                {
-                                    PropertyName = "IsActive",
-                                    Title = "فعال",
-                                    Value = row["IsActive"],
-                                    ValuType = ModelEditorValueType.CheckBox,
-                                    // ValidationRules = new List<ValidationItemField>
-                                    // {
-                                    //     new Regex
-                                    //     {
-                                    //         Pattern = "^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$",
-                                    //         ErrorMessage = "فرمت ایمیل درست نیست."
-                                    //     }
-                                    // }
-                                },
-                                new ItemField
-                                {
-                                    PropertyName = "Tall",
-                                    Title = "قد",
-                                    ValuType = ModelEditorValueType.Number
-                                },
-                                new ItemField
-                                {
-                                    PropertyName = "BirthDate",
-                                    Title = "تاریخ تولد",
-                                    ValuType = ModelEditorValueType.Date
-                                },
-                                new ItemField
-                                {
-                                    PropertyName = "Password",
-                                    Title = "رمز عبور",
-                                    Value = row["Password"],
-                                    ValuType = ModelEditorValueType.Password
-                                }/*,
-                                new SelectiveItemField
-                                {
-                                    PropertyName = "RolesId",
-                                    Title = "نقش",
-                                    ValuType = ModelEditorValueType.Selective,
-                                    Items = _roleService.Read().Select(r=>new SelectItem
-                                    {
-                                        Id = r.Id,
-                                    Title = r.Title
-                                    }).ToList(),
-                                    ErrorMessage = "انتخاب نقش اجباری است"
-                                },*/
-                            }
+                                    baseEntity.GetType().GetProperty(item.Key.Name).SetValue(baseEntity, form[item.Key.Name]);
+                                }
+                                return true;
+                            },
+                    Fields = GenerateEditModalFields(service,row)
                 };
         };
         DataGridConfig.NewRowButtonDataGridConfig = new NewRowButtonDataGridConfig
             {
-                ButtonTitle = "کاربر جدید",
+                ButtonTitle = service.DataGridNewRowButtonTitle,
                 IsShow = true,
                 OnOpenModal = () =>
                 {
                     return new InputModal
                     {
-                        Title = "ایجاد کاربر",
+                        Title = service.DataGridNewRowButtonTitle,
                         ColumnCount = 2,
                         Size = ModalSize.modal_xl,
-                        Fields = new List<ItemField>
+                        Fields = service.Fields.Select(f => new ItemField
                         {
-                                new ItemField
-                                {
-                                    PropertyName = "FirstName",
-                                    Title = "نام",
-                                    ValuType = ModelEditorValueType.Text
-                                },
-                                new ItemField
-                                {
-                                    PropertyName = "LastName",
-                                    Title = "نام خوانوادگی",
-                                    ValuType = ModelEditorValueType.Text
-                                },
-                                new ItemField
-                                {
-                                    PropertyName = "UserName",
-                                    Title = "نام کاربری",
-                                    ValuType = ModelEditorValueType.Text
-                                },
-                                new ItemField
-                                {
-                                    PropertyName = "Email",
-                                    Title = "ایمیل",
-                                    ValuType = ModelEditorValueType.Text,
-                                    ValidationRules = new List<ValidationItemField>
-                                    {
-                                        new Regex
-                                        {
-                                            Pattern = "^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$",
-                                            ErrorMessage = "فرمت ایمیل درست نیست."
-                                        }
-                                    }
-                                },
-                                new ItemField
-                                {
-                                    PropertyName = "IsActive",
-                                    Title = "فعال",
-                                    ValuType = ModelEditorValueType.CheckBox,
-                                    // ValidationRules = new List<ValidationItemField>
-                                    // {
-                                    //     new Regex
-                                    //     {
-                                    //         Pattern = "^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$",
-                                    //         ErrorMessage = "فرمت ایمیل درست نیست."
-                                    //     }
-                                    // }
-                                },
-                                new ItemField
-                                {
-                                    PropertyName = "Tall",
-                                    Title = "قد",
-                                    ValuType = ModelEditorValueType.Number
-                                },
-                                new ItemField
-                                {
-                                    PropertyName = "BirthDate",
-                                    Title = "تاریخ تولد",
-                                    ValuType = ModelEditorValueType.Date
-                                },
-                                new ItemField
-                                {
-                                    PropertyName = "Time",
-                                    Title = "زمان",
-                                    ValuType = ModelEditorValueType.Time
-                                },
-                                new ItemField
-                                {
-                                    PropertyName = "Password",
-                                    Title = "رمز عبور",
-                                    ValuType = ModelEditorValueType.Password
-                                },
-                                new ItemField
-                                {
-                                    PropertyName = "RepeatPassword",
-                                    Title = "تکرار رمز عبور",
-                                    ValuType = ModelEditorValueType.Password
-                                }/*,
-                                new SelectiveItemField
-                                {
-                                    PropertyName = "RolesId",
-                                    Title = "نقش",
-                                    ValuType = ModelEditorValueType.Selective,
-                                    Items = _roleService.Read().Select(r=>new SelectItem
-                                    {
-                                        Id = r.Id,
-                                    Title = r.Title
-                                    }).ToList()
-                                },*/
-                        },
+                            PropertyName = f.Key.Name,
+                            Title = f.Key.Title
+                        }).ToList(),
                         OnSubmit = (form) =>
                         {
-                            var Password = form["Password"];
-                            var RepeatPassword = form["RepeatPassword"];
-                            if (Password != RepeatPassword)
+                            var dict = new Dictionary<string, Type>();
+                            foreach (var field in service.Fields)
                             {
-                                _toastService.Show("رمز عبور با تکرار ان تفاوت دارد.", ToastLevel.Error, 3000, "هشدار");
-                                return false;
+                                dict.Add(field.Key.Name, typeof(string));
                             }
-                            var User = new User
+                            var baseEntity = (BaseEntity)BaseEntity.CreateDynamicEntity(service.ServiceName, dict);
+                            foreach (var item in service.Fields)
                             {
-                                FirstName = form["FirstName"],
-                                LastName = form["LastName"],
-                                UserName = form["UserName"],
-                                Password = Password,
-                                Tall = form["Tall"].ToInt32(),
-                                RolesId = form["RolesId"].Split(",").Select(rid => rid.ToInt32()).ToList(),
-                            };
-                            //_usersService.Create(User);
+                                baseEntity.GetType().GetProperty(item.Key.Name).SetValue(baseEntity, form[item.Key.Name]);
+                            }
+                            baseEntity.Id = _genericService.Create(service.ServiceName, baseEntity);
+
                             return true;
                         }
                     };
                 }
             };
 
+    }
+
+    private List<DataGridColumn> GenerateDataGridColumn(Models.Generic service)
+    {
+        var cols = new List<DataGridColumn>();
+        cols.Add(new DataGridColumn
+            {
+                PropertyName = "Id",
+                Title = "شناسه"
+            });
+        cols.AddRange(service.Fields.Select(f => new DataGridColumn
+            {
+                PropertyName = f.Key.Name,
+                Title = f.Key.Title
+            }));
+            return cols;
+    }    
+    private List<ItemField> GenerateEditModalFields(Models.Generic service, Dictionary<string, string> row)
+    {
+        var cols = new List<ItemField>();
+        cols.Add(new ItemField
+            {
+                PropertyName = "Id",
+                Title = "شناسه",
+                Value = row["Id"],
+                ValuType = ModelEditorValueType.Readonly
+            });
+        cols.AddRange(service.Fields.Select(f => new ItemField
+            {
+                PropertyName = f.Key.Name,
+                Title = f.Key.Title,
+                Value = row[f.Key.Name],
+            }));
+            return cols;
     }
 }

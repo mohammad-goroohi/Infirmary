@@ -20,10 +20,13 @@ namespace Infirmary.Services
             Create(new Generic
             {
                 Id = 1,
+                DataGridTitle = "حسابداری",
                 ServiceName = "Accounting",
-                Fields = new Dictionary<string, object>()
+                DataGridNewRowButtonTitle = "ایجاد",
+                Fields = new Dictionary<Property, object>()
                 {
-                    {"Name","Test" }
+                    {new Property("FirstName","نام"),"" },
+                    {new Property("LastName","نام خانوادگی"),"" }
                 }
             });
 
